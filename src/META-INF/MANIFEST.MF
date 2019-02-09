@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: org.ssm.cli.Main
+Application-Name: SainSmart iMatic RelayController
+Application-Version: 1.0
+Bundle-Developers: Sunchezz
