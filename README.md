@@ -1,5 +1,5 @@
 # iMatic Relayboard Controller
-Java API for the SainSmart iMatic 16Ch RelayBoard
+Java API for the SainSmart iMatic 16 Channel RelayBoard.
 
 ### Commandline Usage
 For command line usage start the jar with the `java -jar` option in the folder where you put the Jar file.
