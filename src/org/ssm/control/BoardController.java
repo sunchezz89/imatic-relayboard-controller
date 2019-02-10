@@ -140,12 +140,11 @@ public class BoardController {
      * <br/>Example:<br/>
      * States on the Board before: {@code OFF,OFF,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON}<br/>
      * Parameter: {@code [0,1,15]}<br/>
-     * Return value and state on the board after: {@code ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,OFF}<br/>
+     * States on the board after: {@code ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,ON,OFF}<br/>
      *
      * @param relayNumbers The relay numbers to toggle.
-     * @return the states for the requested relays after the operation.
      */
-    public RelayState[] toggleRelay(int[] relayNumbers) {
+    public void toggleRelay(int[] relayNumbers) {
 
         RelayState[] currentStates = getAllStates();
         for (int relayNumber : relayNumbers) {
@@ -154,7 +153,6 @@ public class BoardController {
 
             setRelay(relayNumber, toggledState);
         }
-        return getRelayStates(relayNumbers);
     }
 
     /**
@@ -189,6 +187,12 @@ public class BoardController {
         Arrays.fill(states, RelayState.OFF);
 
         try {
+            // skip possible income bytes, which we do not want
+            if (tcpSocket.getInputStream().available() > 0) {
+                tcpSocket.getInputStream().skip(tcpSocket.getInputStream().available());
+            }
+
+
             // command to request all relays which are currently in state ON.
             byte[] command = new byte[]{88, 1, 16, 0, 0, 0, 0, 105};
             sendCmd(command);
