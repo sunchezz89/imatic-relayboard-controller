@@ -43,7 +43,6 @@ public class BoardController {
     public BoardController(String host, int port) {
         this.port = port;
         this.host = host;
-        this.tcpSocket = new Socket();
     }
 
     /**
@@ -64,6 +63,7 @@ public class BoardController {
      */
     public void connect(int timeout) throws IOException {
         SocketAddress address = new InetSocketAddress(host, port);
+        this.tcpSocket = new Socket();
         this.tcpSocket.connect(address, timeout);
     }
 
