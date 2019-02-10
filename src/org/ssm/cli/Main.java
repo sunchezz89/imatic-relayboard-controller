@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public class Main {
 
-    private static String version = "1.0";
+    private static String version = "1.0.1";
 
     public static void main(String[] args) {
         PropertyHolder parameter = new PropertyHolder();
@@ -22,12 +22,14 @@ public class Main {
         try {
             // Get Parameter and put into parameter
             parser.parseArgument(args);
-            runApi(parameter);
+            if (parameter.help) {
+                printUsage(parser, null);
+            } else {
+                runApi(parameter);
+            }
         } catch (CmdLineException e) {
             // handling of wrong arguments
-            System.err.println(e.getMessage());
-            System.out.println("\n----- Relay Controller v" + version + "-----\n");
-            parser.printUsage(System.err);
+            printUsage(parser, e);
         } catch (Exception e) {
             if (parameter.debug) {
                 e.printStackTrace();
@@ -51,49 +53,82 @@ public class Main {
             case "set-all":
                 // sets and retrieve the states for all relays and print
                 result = controller.setAllRelay(properties.state);
-                printRelayStates(result);
+                printAllRelayStates(result);
                 break;
             case "get-all":
                 // retrieve the states and print
                 result = controller.getAllStates();
-                printRelayStates(result);
+                printAllRelayStates(result);
                 break;
             case "set-state":
                 // Set the relays to the given state
-                controller.setRelay(properties.relaynumber, properties.state);
+                controller.setRelay(properties.relayNumbers, properties.state);
+
+                // wait for relays to switch, for asccurate states.
+                waitForRelays(properties.relayNumbers.length);
 
                 // retrieve the states for given relays and print
-                result = controller.getRelayStates(properties.relaynumber);
-                printRelayStates(properties.relaynumber, result);
+                printCurrentStates(controller, properties.relayNumbers);
                 break;
             case "get-state":
                 // retrieve the states for given relays and print
-                result = controller.getRelayStates(properties.relaynumber);
-                printRelayStates(properties.relaynumber, result);
+                result = controller.getRelayStates(properties.relayNumbers);
+                printRelayStates(properties.relayNumbers, result);
                 break;
             case "toggle-state":
             case "toggle":
                 // retrieve the state of every given relay, and sets the opposite.
-                result = controller.toggleRelay(properties.relaynumber);
-                printRelayStates(properties.relaynumber, result);
-                break;
+                controller.toggleRelay(properties.relayNumbers);
 
+                // wait for relays to switch, for asccurate states.
+                waitForRelays(properties.relayNumbers.length);
+
+                // retrieve the states for given relays and print
+                printCurrentStates(controller, properties.relayNumbers);
+                break;
+            default:
+                System.out.println("unknown action. use --help for usage hints.");
         }
+        controller.close();
     }
 
-    private static void printRelayStates(RelayState[] states) {
+    private static void printCurrentStates(BoardController controller, int[] relayNumbers) {
+        RelayState[] result = controller.getRelayStates(relayNumbers);
+        printRelayStates(relayNumbers, result);
+    }
+
+    private static void printAllRelayStates(RelayState[] states) {
         for (int i = 0; i < states.length; i++) {
-            printRelayState((i + 1), states[i]);
+            printRelayState((i), states[i]);
         }
     }
 
     private static void printRelayStates(int[] numbers, RelayState[] states) {
         for (int i = 0; i < states.length; i++) {
-            printRelayState((numbers[i] + 1), states[i]);
+            printRelayState((numbers[i]), states[i]);
         }
     }
 
-    private static void printRelayState(int number, RelayState state) {
-        System.out.println(number + ": " + state);
+    private static void printRelayState(int realRelayNumber, RelayState state) {
+        System.out.println(realRelayNumber + 1 + ": " + state);
+    }
+
+    private static void printUsage(CmdLineParser parser, Exception e) {
+        if (e != null) {
+            System.err.println(e.getMessage());
+        }
+
+        System.out.println("\n----- Relay Controller v" + version + " -----\n");
+        parser.printUsage(System.err);
+    }
+
+    private static void waitForRelays(int count) {
+        try {
+            // Wait for every relay 500ms to be switched
+            // If we do not wait, the result is maybe incorrect.
+            Thread.sleep(500 * count);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
