@@ -29,8 +29,8 @@ public class PropertyHolder {
     String action = "get-all";
 
 
-    @Option(name = "-r", aliases = {"--relay", "--relays"}, usage = "Set the number of relay(s) to interact with. Like '1,4,6'")
-    int[] relaynumber = new int[]{0};
+    @Option(name = "-r", aliases = {"--relay", "--relays"}, usage = "Set the number of relay(s) to interact with. Like '1,4,6'", handler = IntArrayOptionHandler.class)
+    int[] relayNumbers = new int[]{1};
 
     @Option(name = "-s", aliases = "--state", usage = "Set the desired state for targeted relays.")
     RelayState state = RelayState.ON;
@@ -40,5 +40,8 @@ public class PropertyHolder {
 
     @Option(name = "--debug", usage = "Sets to debugmode and prints full stacktraces.")
     boolean debug;
+
+    @Option(name = "--help", usage = "Prints this usage help.")
+    boolean help;
 
 }
