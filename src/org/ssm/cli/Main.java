@@ -70,6 +70,16 @@ public class Main {
                 // retrieve the states for given relays and print
                 printCurrentStates(controller, properties.relayNumbers);
                 break;
+            case "touch":
+                // Set the relays to the given state for a given time
+                controller.touchRelayTimed(properties.relayNumbers, properties.state, properties.touchTime);
+
+                // wait for relays to switch, for asccurate states.
+                waitForRelays(properties.relayNumbers.length);
+
+                // retrieve the states for given relays and print
+                printCurrentStates(controller, properties.relayNumbers);
+                break;
             case "get-state":
                 // retrieve the states for given relays and print
                 result = controller.getRelayStates(properties.relayNumbers);

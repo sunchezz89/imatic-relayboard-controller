@@ -135,6 +135,24 @@ public class BoardController {
     }
 
     /**
+     * Sets the State of the given relay to the given State, for the exact time in milli seconds.
+     * After the given time, the state will be toggled.
+     *
+     * @param relayNumbers the relay which should change.
+     * @param state        the state which should be hold for the time.
+     * @param timeMs       how long the relay should be 'touched'
+     */
+    public void touchRelayTimed(int[] relayNumbers, RelayState state, int timeMs) {
+        try {
+            setRelay(relayNumbers, state);
+            Thread.sleep(timeMs);
+            setRelay(relayNumbers, state.toggle());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Switches the current state of the requested relays.
      * Calls internally {@link #setRelay(int, RelayState)} with the reversed state.
      * <br/>Example:<br/>

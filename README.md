@@ -6,7 +6,7 @@ Feel free to create issues and open tickets, if something wents wrong, you have 
 
 ### Commandline Usage
 For command line usage start the jar with the `java -jar` option in the folder where you put the Jar file.
-
+The CLI is working with relay numbers from 1-16. Internally the API is working with typical numbers from 0-15.
 
 ##### Example set States
 ```
@@ -14,7 +14,8 @@ $ java -jar Relayboard-Controller.jar --action set-all --state ON
 1. ON
 2. ON
 3. ON
-4. etc.  
+4. etc.
+16. ON
 ```
 ##### Example set State
 ```
@@ -48,6 +49,7 @@ $ java -jar Relayboard-Controller.jar --action toggle -r 1,4
           -      set-state: get state of relay(s) specified in --relay option (requires -r & -s)
           -      toggle|toggle-state: set the opposite state of the specified relay(s) (requires -r)
           -      toggle-all: set the opposite state of the specified relay(s) (ignores -r) (FUTURE VERSION)
+          -      touch: sets the relay(-r) to the given state(-s) for a given time(-t) (requires -r|s|t)
                             
     -h (--host) WERT         : Sets the target host (IP, or qualified name). (default: 192.168.178.1)
     -p (--port) N            : Sets the target port of the board. (default: 3000)

@@ -25,6 +25,7 @@ public class PropertyHolder {
             + "\n get-state: get state of relay(s) specified in --relay option (requires -r)"
             + "\n set-state: get state of relay(s) specified in --relay option (requires -r & -s)"
             + "\n toggle|toggle-state: set the opposite state of the current of specified relay(s) (requires -r)"
+            + "\n touch: sets the relay(-r) to the given state(-s) for a given time(-t) (requires -r|s|t)"
     )
     String action = "get-all";
 
@@ -34,6 +35,9 @@ public class PropertyHolder {
 
     @Option(name = "-s", aliases = "--state", usage = "Set the desired state for targeted relays.")
     RelayState state = RelayState.ON;
+
+    @Option(name = "-t", aliases = "--touchTime", usage = "Set the time, relay(s) is/are touched.")
+    int touchTime;
 
     @Option(name = "--timeout", usage = "Set connect timeout in milliseconds.")
     int timeout;
