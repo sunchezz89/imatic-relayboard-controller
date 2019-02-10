@@ -30,7 +30,7 @@ public class PropertyHolder {
 
 
     @Option(name = "-r", aliases = {"--relay", "--relays"}, usage = "Set the number of relay(s) to interact with. Like '1,4,6'", handler = IntArrayOptionHandler.class)
-    int[] relayNumbers = new int[]{1};
+    int[] relayNumbers = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
     @Option(name = "-s", aliases = "--state", usage = "Set the desired state for targeted relays.")
     RelayState state = RelayState.ON;
