@@ -5,6 +5,8 @@ Java API for the SainSmart iMatic 16 Channel RelayBoard.
 Feel free to create issues and open tickets, if something wents wrong, you have a feature Request, or need help.
 
 ### Commandline Usage
+To use this API from Command line, you need Java. Download the jar-file from /bin/
+
 For command line usage start the jar with the `java -jar` option in the folder where you put the Jar file.
 The CLI is working with relay numbers from 1-16. Internally the API is working with typical numbers from 0-15.
 
